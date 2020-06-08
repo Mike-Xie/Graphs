@@ -30,7 +30,7 @@ class Graph:
         """
         Get all neighbors (edges) of a vertex.
         """
-        pass  # TODO
+        return self.vertices[vertex_id]
 
     def bft(self, starting_vertex):
         """
@@ -107,6 +107,7 @@ if __name__ == '__main__':
         {1: {2}, 2: {3, 4}, 3: {5}, 4: {6, 7}, 5: {3}, 6: {3}, 7: {1, 6}}
     '''
     print(graph.vertices)
+    print(graph.get_neighbors(1))
 
     '''
     Valid BFT paths:
