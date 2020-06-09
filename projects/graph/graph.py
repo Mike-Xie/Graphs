@@ -76,13 +76,13 @@ class Graph:
 
     # helper function to get around not modifying dft_recursive arguments
 
-    def DFT_visited_tracker(self, starting_vertex: int, visited: List[bool]) -> None:
+    def dft_visited_tracker(self, starting_vertex: int, visited: List[bool]) -> None:
         
         visited[starting_vertex] = True
         print(starting_vertex)
         for neighbor in self.get_neighbors(starting_vertex):
             if visited[neighbor] == False:
-                self.DFT_visited_tracker(neighbor, visited)
+                self.dft_visited_tracker(neighbor, visited)
 
     def dft_recursive(self, starting_vertex: int) -> None:
         """
@@ -92,7 +92,7 @@ class Graph:
         This should be done using recursion.
         """
         visited = (len(self.vertices) + 1)  * [False]
-        self.DFT_visited_tracker(starting_vertex, visited)
+        self.dft_visited_tracker(starting_vertex, visited)
         
     def bfs(self, starting_vertex: int, destination_vertex: int) -> List[int]:
         """
@@ -109,14 +109,15 @@ class Graph:
             path = q.dequeue() 
             curr = path[-1] # last node from path, addition from BFT
             if curr not in visited_nodes:
+                # print(curr)
                 visited_nodes.add(curr)
                 if curr == destination_vertex: # stop cond, addition from BFT
                     return path
                 for neighbor in self.get_neighbors(curr):
                     # addition from BFT, create new path and add neighbor to new path list
-                    new_path = list(path) 
-                    new_path.append((neighbor))
-                    q.enqueue(new_path)
+                    final_path = list(path) 
+                    final_path.append((neighbor))
+                    q.enqueue(final_path)
 
     def dfs(self, starting_vertex: int, destination_vertex: int) -> List[int]:
         """
@@ -131,13 +132,32 @@ class Graph:
             path = s.pop()
             curr = path[-1]
             if curr not in visited_nodes:
+                # print(curr)
                 visited_nodes.add(curr)
                 if curr == destination_vertex:
                     return path 
                 for neighbor in self.get_neighbors(curr):
-                    new_path = list(path)
-                    new_path.append(neighbor)
-                    s.push(new_path)
+                    final_path = list(path)
+                    final_path.append(neighbor)
+                    s.push(final_path)
+
+    def dfs_visited_tracker(self, starting_vertex: int, destination_vertex:int, visited_nodes: List[bool]=None, path: List[int]=None) -> None:
+        if visited_nodes is None:
+            visited_nodes = set()
+        if path is None:
+            path = []
+        visited_nodes.add(starting_vertex)
+        copy_path = path.copy() # only want to keep branch if it is on the way to destination 
+        copy_path.append(starting_vertex)
+        print(starting_vertex, copy_path)
+        if starting_vertex == destination_vertex:
+            return copy_path
+        # print(starting_vertex)
+        for neighbor in self.get_neighbors(starting_vertex):
+            if neighbor not in visited_nodes:
+                final_path = self.dfs_visited_tracker(neighbor, destination_vertex, visited_nodes, copy_path)
+                if final_path:
+                    return final_path
 
     def dfs_recursive(self, starting_vertex: int, destination_vertex: int) -> List[int]:
         """
@@ -147,7 +167,7 @@ class Graph:
 
         This should be done using recursion.
         """
-        pass  # TODO
+        self.dfs_visited_tracker(starting_vertex, destination_vertex)
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
@@ -222,4 +242,5 @@ if __name__ == '__main__':
     '''
     print("DFS path")
     print(graph.dfs(1, 6))
+    print("Recursive DFS path")
     print(graph.dfs_recursive(1, 6))
