@@ -2,7 +2,7 @@
 Simple graph implementation
 """
 from util import Stack, Queue  # These may come in handy
-from typing import List, Set
+from typing import List, Set 
 from pyannotate_runtime import collect_types
 class Graph:
 
@@ -43,14 +43,31 @@ class Graph:
         Print each vertex in breadth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
-
+        q = Queue()
+        q.enqueue(starting_vertex)
+        visited_nodes: Set = set()
+        while q.size() > 0:
+            curr = q.dequeue()
+            if curr not in visited_nodes:
+                print(curr)
+                visited_nodes.add(curr)
+                for i in self.get_neighbors(curr):
+                    q.enqueue(i)
     def dft(self, starting_vertex: int) -> List[int]:
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
-        pass  # TODO
+        s = Stack()
+        s.push(starting_vertex)
+        visited_nodes: Set = set()
+        while s.size() > 0:
+            curr = s.pop()
+            if curr not in visited_nodes:
+                print(curr)
+                visited_nodes.add(curr)
+                for i in self.get_neighbors(curr):
+                    s.push(i)
 
     def dft_recursive(self, starting_vertex: int) -> List[int]:
         """
@@ -131,6 +148,7 @@ if __name__ == '__main__':
         1, 2, 4, 3, 7, 6, 5
         1, 2, 4, 3, 7, 5, 6
     '''
+    print("BFT TEST")
     graph.bft(1)
 
     '''
@@ -140,6 +158,7 @@ if __name__ == '__main__':
         1, 2, 4, 7, 6, 3, 5
         1, 2, 4, 6, 3, 5, 7
     '''
+    print("DFT TEST")
     graph.dft(1)
     graph.dft_recursive(1)
 
