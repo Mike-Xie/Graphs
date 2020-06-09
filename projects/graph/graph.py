@@ -2,51 +2,57 @@
 Simple graph implementation
 """
 from util import Stack, Queue  # These may come in handy
-
+from typing import List, Set
+from pyannotate_runtime import collect_types
 class Graph:
 
     """Represent a graph as a dictionary of vertices mapping labels to edges."""
     def __init__(self):
         self.vertices = {}
 
-    def add_vertex(self, vertex_id: int):
+    def add_vertex(self, vertex_id: int) -> None:
         """
         Mutates vertices dictionary by adding a new key with an empty value
         """
         self.vertices[vertex_id] = set()
 
-    def add_edge(self, v1, v2):
+    def add_edge(self, v1: int, v2: int) -> None:
         """
         Add a directed edge to the graph.
         Note that assignment adds, it does not replace
         """
-        self.vertices[v1].add(v2) #, self.vertices[v2].add(v1)
+        if v1 in self.vertices and v2 in self.vertices:
+            self.vertices[v1].add(v2) #, self.vertices[v2].add(v1)
+        else:
+            return "Invalid edge, at least one of these does not exist"
+    def add_undirected_edge(self, v1: int, v2: int) -> None:
+        
+        if v1 in self.vertices and v2 in self.vertices:
+            self.vertices[v1].add(v2), self.vertices[v2].add(v1)
+        else:
+            return "Invalid edge, at least one of these does not exist"        
 
-    def add_undirected_edge(self, v1, v2):
-        self.vertices[v1].add(v2), self.vertices[v2].add(v1)
-
-
-    def get_neighbors(self, vertex_id):
+    def get_neighbors(self, vertex_id: int) -> Set[int]:
         """
         Get all neighbors (edges) of a vertex.
         """
         return self.vertices[vertex_id]
 
-    def bft(self, starting_vertex):
+    def bft(self, starting_vertex: int) -> List[int]:
         """
         Print each vertex in breadth-first order
         beginning from starting_vertex.
         """
         pass  # TODO
 
-    def dft(self, starting_vertex):
+    def dft(self, starting_vertex: int) -> List[int]:
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
         pass  # TODO
 
-    def dft_recursive(self, starting_vertex):
+    def dft_recursive(self, starting_vertex: int) -> List[int]:
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
@@ -107,7 +113,8 @@ if __name__ == '__main__':
         {1: {2}, 2: {3, 4}, 3: {5}, 4: {6, 7}, 5: {3}, 6: {3}, 7: {1, 6}}
     '''
     print(graph.vertices)
-    print(graph.get_neighbors(1))
+    print(graph.get_neighbors(1)) # Should print {2}
+
 
     '''
     Valid BFT paths:
