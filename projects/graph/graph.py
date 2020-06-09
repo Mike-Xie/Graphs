@@ -94,14 +94,29 @@ class Graph:
         visited = (len(self.vertices) + 1)  * [False]
         self.DFT_visited_tracker(starting_vertex, visited)
         
-
     def bfs(self, starting_vertex: int, destination_vertex: int) -> List[int]:
         """
         Return a list containing the shortest path from
         starting_vertex to destination_vertex in
-        breath-first order.
+        breath-first order. Basically same as BFTraversal
+        Except we stop once we find our destination
+        And we have to store the paths in a list
         """
-        pass  # TODO
+        q = Queue() 
+        q.enqueue([starting_vertex]) # store start as a list element
+        visited_nodes: Set = set()
+        while q.size() > 0:
+            path = q.dequeue() 
+            curr = path[-1] # last node from path, addition from BFT
+            if curr not in visited_nodes:
+                visited_nodes.add(curr)
+                if curr == destination_vertex: # stop cond, addition from BFT
+                    return path
+                for neighbor in self.get_neighbors(curr):
+                    # addition from BFT, create new path and add neighbor to new path list
+                    new_path = list(path) 
+                    new_path.append((neighbor))
+                    q.enqueue(new_path)
 
     def dfs(self, starting_vertex: int, destination_vertex: int) -> List[int]:
         """
@@ -184,6 +199,7 @@ if __name__ == '__main__':
     Valid BFS path:
         [1, 2, 4, 6]
     '''
+    print("BFS path")
     print(graph.bfs(1, 6))
 
     '''
