@@ -151,15 +151,17 @@ class Graph:
         copy_path.append(starting_vertex)
         print(starting_vertex, destination_vertex, copy_path)
         if starting_vertex == destination_vertex:
-            # print(copy_path)
+            print(copy_path)
             return copy_path
-        # print(starting_vertex)
-        for neighbor in self.get_neighbors(starting_vertex):
-            if neighbor not in visited_nodes:
-                final_path = self.dfs_route_finder(neighbor, destination_vertex, visited_nodes, copy_path)
-                if final_path:
-                    return final_path
-
+        else:
+            for neighbor in self.get_neighbors(starting_vertex):
+                if neighbor not in visited_nodes:
+                    final_path = self.dfs_route_finder(neighbor, destination_vertex, visited_nodes, copy_path)
+                    if final_path:
+                        print("final_path",final_path)
+                        return final_path
+       # return None 
+        
     def dfs_recursive(self, starting_vertex: int, destination_vertex: int) -> List[int]:
         """
         Return a list containing a path from
@@ -168,7 +170,7 @@ class Graph:
 
         This should be done using recursion.
         """
-        self.dfs_route_finder(starting_vertex, destination_vertex)
+        return self.dfs_route_finder(starting_vertex, destination_vertex)
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
@@ -184,10 +186,10 @@ if __name__ == '__main__':
     graph.add_edge(6, 3)
     graph.add_edge(7, 1)
     graph.add_edge(4, 7)
-    graph.add_edge(1, 2)
-    graph.add_edge(7, 6)
-    graph.add_edge(2, 4)
-    graph.add_edge(3, 5)
+    # graph.add_edge(1, 2)
+    # graph.add_edge(7, 6)
+    # graph.add_edge(2, 4)
+    # graph.add_edge(3, 5)
     graph.add_edge(2, 3)
     graph.add_edge(4, 6)
 
