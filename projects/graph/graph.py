@@ -51,10 +51,11 @@ class Graph:
             if curr not in visited_nodes:
                 print(curr)
                 visited_nodes.add(curr)
-                for i in self.get_neighbors(curr):
-                    q.enqueue(i)
+                for neighbor in self.get_neighbors(curr):
+                    q.enqueue(neighbor)
         # print(visited_nodes)
         # return visited_nodes
+
     def dft(self, starting_vertex: int) -> None:
         """
         Print each vertex in depth-first order
@@ -68,21 +69,33 @@ class Graph:
             if curr not in visited_nodes:
                 print(curr)
                 visited_nodes.add(curr)
-                for i in self.get_neighbors(curr):
-                    s.push(i)
+                for neighbor in self.get_neighbors(curr):
+                    s.push(neighbor)
        # print(visited_nodes)
        # return visited_nodes
 
-    def dft_recursive(self, starting_vertex: int) -> List[int]:
+    # helper function to get around not modifying dft_recursive arguments
+
+    def DFT_visited_tracker(self, starting_vertex: int, visited: List[bool]) -> None:
+        
+        visited[starting_vertex] = True
+        print(starting_vertex)
+        for neighbor in self.get_neighbors(starting_vertex):
+            if visited[neighbor] == False:
+                self.DFT_visited_tracker(neighbor, visited)
+
+    def dft_recursive(self, starting_vertex: int) -> None:
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
 
         This should be done using recursion.
         """
-        pass  # TODO
+        visited = (len(self.vertices) + 1)  * [False]
+        self.DFT_visited_tracker(starting_vertex, visited)
+        
 
-    def bfs(self, starting_vertex, destination_vertex):
+    def bfs(self, starting_vertex: int, destination_vertex: int) -> List[int]:
         """
         Return a list containing the shortest path from
         starting_vertex to destination_vertex in
@@ -90,7 +103,7 @@ class Graph:
         """
         pass  # TODO
 
-    def dfs(self, starting_vertex, destination_vertex):
+    def dfs(self, starting_vertex: int, destination_vertex: int) -> List[int]:
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
@@ -98,7 +111,7 @@ class Graph:
         """
         pass  # TODO
 
-    def dfs_recursive(self, starting_vertex, destination_vertex):
+    def dfs_recursive(self, starting_vertex: int, destination_vertex: int) -> List[int]:
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
@@ -164,6 +177,7 @@ if __name__ == '__main__':
     '''
     print("DFT TEST")
     graph.dft(1)
+    print("DFT RECURSE TEST")
     graph.dft_recursive(1)
 
     '''
