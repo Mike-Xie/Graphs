@@ -38,7 +38,7 @@ class Graph:
         """
         return self.vertices[vertex_id]
 
-    def bft(self, starting_vertex: int) -> List[int]:
+    def bft(self, starting_vertex: int) -> None:
         """
         Print each vertex in breadth-first order
         beginning from starting_vertex.
@@ -53,7 +53,9 @@ class Graph:
                 visited_nodes.add(curr)
                 for i in self.get_neighbors(curr):
                     q.enqueue(i)
-    def dft(self, starting_vertex: int) -> List[int]:
+        # print(visited_nodes)
+        # return visited_nodes
+    def dft(self, starting_vertex: int) -> None:
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
@@ -68,6 +70,8 @@ class Graph:
                 visited_nodes.add(curr)
                 for i in self.get_neighbors(curr):
                     s.push(i)
+       # print(visited_nodes)
+       # return visited_nodes
 
     def dft_recursive(self, starting_vertex: int) -> List[int]:
         """
