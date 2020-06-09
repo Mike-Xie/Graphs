@@ -162,7 +162,7 @@ class Graph:
                         return final_path
        # return None 
         
-    def dfs_recursive(self, starting_vertex: int, destination_vertex: int) -> List[int]:
+    def dfs_recursive(self, starting_vertex: int, destination_vertex: int, visited_nodes: List[bool]=None, path: List[int]=None) -> List[int]:
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
@@ -170,8 +170,25 @@ class Graph:
 
         This should be done using recursion.
         """
-        return self.dfs_route_finder(starting_vertex, destination_vertex)
-
+        # return self.dfs_route_finder(starting_vertex, destination_vertex)
+        if visited_nodes is None:
+            visited_nodes = set()
+        if path is None:
+            path = []
+        visited_nodes.add(starting_vertex)
+        copy_path = path.copy() # only want to keep branch if it is on the way to destination 
+        copy_path.append(starting_vertex)
+        print(starting_vertex, destination_vertex, copy_path)
+        if starting_vertex == destination_vertex:
+            print(copy_path)
+            return copy_path
+        else:
+            for neighbor in self.get_neighbors(starting_vertex):
+                if neighbor not in visited_nodes:
+                    final_path = self.dfs_route_finder(neighbor, destination_vertex, visited_nodes, copy_path)
+                    if final_path:
+                        print("final_path",final_path)
+                        return final_path
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
     # https://github.com/LambdaSchool/Graphs/blob/master/objectives/breadth-first-search/img/bfs-visit-order.png
@@ -186,10 +203,10 @@ if __name__ == '__main__':
     graph.add_edge(6, 3)
     graph.add_edge(7, 1)
     graph.add_edge(4, 7)
-    # graph.add_edge(1, 2)
-    # graph.add_edge(7, 6)
-    # graph.add_edge(2, 4)
-    # graph.add_edge(3, 5)
+    graph.add_edge(1, 2)
+    graph.add_edge(7, 6)
+    graph.add_edge(2, 4)
+    graph.add_edge(3, 5)
     graph.add_edge(2, 3)
     graph.add_edge(4, 6)
 
