@@ -141,7 +141,7 @@ class Graph:
                     final_path.append(neighbor)
                     s.push(final_path)
 
-    def dfs_visited_tracker(self, starting_vertex: int, destination_vertex:int, visited_nodes: List[bool]=None, path: List[int]=None) -> None:
+    def dfs_route_finder(self, starting_vertex: int, destination_vertex:int, visited_nodes: List[bool]=None, path: List[int]=None) -> List[int]:
         if visited_nodes is None:
             visited_nodes = set()
         if path is None:
@@ -149,13 +149,14 @@ class Graph:
         visited_nodes.add(starting_vertex)
         copy_path = path.copy() # only want to keep branch if it is on the way to destination 
         copy_path.append(starting_vertex)
-        print(starting_vertex, copy_path)
+        print(starting_vertex, destination_vertex, copy_path)
         if starting_vertex == destination_vertex:
+            # print(copy_path)
             return copy_path
         # print(starting_vertex)
         for neighbor in self.get_neighbors(starting_vertex):
             if neighbor not in visited_nodes:
-                final_path = self.dfs_visited_tracker(neighbor, destination_vertex, visited_nodes, copy_path)
+                final_path = self.dfs_route_finder(neighbor, destination_vertex, visited_nodes, copy_path)
                 if final_path:
                     return final_path
 
@@ -167,7 +168,7 @@ class Graph:
 
         This should be done using recursion.
         """
-        self.dfs_visited_tracker(starting_vertex, destination_vertex)
+        self.dfs_route_finder(starting_vertex, destination_vertex)
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
