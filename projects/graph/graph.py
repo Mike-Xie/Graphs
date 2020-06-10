@@ -3,7 +3,7 @@ Simple graph implementation
 """
 from util import Stack, Queue  # These may come in handy
 from typing import List, Set 
-from pyannotate_runtime import collect_types
+# from pyannotate_runtime import collect_types
 class Graph:
 
     """Represent a graph as a dictionary of vertices mapping labels to edges."""
@@ -24,13 +24,13 @@ class Graph:
         if v1 in self.vertices and v2 in self.vertices:
             self.vertices[v1].add(v2) #, self.vertices[v2].add(v1)
         else:
-            return "Invalid edge, at least one of these does not exist"
+            print("Invalid edge, at least one of these does not exist")
     def add_undirected_edge(self, v1: int, v2: int) -> None:
         
         if v1 in self.vertices and v2 in self.vertices:
             self.vertices[v1].add(v2), self.vertices[v2].add(v1)
         else:
-            return "Invalid edge, at least one of these does not exist"        
+            print("Invalid edge, at least one of these does not exist")        
 
     def get_neighbors(self, vertex_id: int) -> Set[int]:
         """
@@ -115,9 +115,11 @@ class Graph:
                     return path
                 for neighbor in self.get_neighbors(curr):
                     # addition from BFT, create new path and add neighbor to new path list
-                    final_path = list(path) 
-                    final_path.append((neighbor))
-                    q.enqueue(final_path)
+                    neighbor_path = list(path) 
+                    neighbor_path.append((neighbor))
+                    q.enqueue(neighbor_path)
+       # return None 
+        raise Value("Oops, there is no path") 
 
     def dfs(self, starting_vertex: int, destination_vertex: int) -> List[int]:
         """
@@ -137,58 +139,36 @@ class Graph:
                 if curr == destination_vertex:
                     return path 
                 for neighbor in self.get_neighbors(curr):
-                    final_path = list(path)
-                    final_path.append(neighbor)
-                    s.push(final_path)
-
-    def dfs_route_finder(self, starting_vertex: int, destination_vertex:int, visited_nodes: List[bool]=None, path: List[int]=None) -> List[int]:
-        if visited_nodes is None:
-            visited_nodes = set()
-        if path is None:
-            path = []
-        visited_nodes.add(starting_vertex)
-        copy_path = path.copy() # only want to keep branch if it is on the way to destination 
-        copy_path.append(starting_vertex)
-        print(starting_vertex, destination_vertex, copy_path)
-        if starting_vertex == destination_vertex:
-            print(copy_path)
-            return copy_path
-        else:
-            for neighbor in self.get_neighbors(starting_vertex):
-                if neighbor not in visited_nodes:
-                    final_path = self.dfs_route_finder(neighbor, destination_vertex, visited_nodes, copy_path)
-                    if final_path:
-                        print("final_path",final_path)
-                        return final_path
-       # return None 
+                    neighbor_path = list(path)
+                    neighbor_path.append(neighbor)
+                    s.push(neighbor_path)
+        raise ValueError("Oops, there is no path") 
         
-    def dfs_recursive(self, starting_vertex: int, destination_vertex: int, visited_nodes: List[bool]=None, path: List[int]=None) -> List[int]:
+    def dfs_recursive(self, starting_vertex: int, destination_vertex: int, visited_nodes: set=None, initial_path: List[int]=None) -> List[int]:
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
-        depth-first order.
-
-        This should be done using recursion.
+        depth-first order using recursion.
         """
-        # return self.dfs_route_finder(starting_vertex, destination_vertex)
+        
         if visited_nodes is None:
             visited_nodes = set()
-        if path is None:
-            path = []
+        if initial_path is None:
+            initial_path = []
         visited_nodes.add(starting_vertex)
-        copy_path = path.copy() # only want to keep branch if it is on the way to destination 
-        copy_path.append(starting_vertex)
-        print(starting_vertex, destination_vertex, copy_path)
+        next_path = initial_path.copy() # only want to keep branch if it is on the way to destination 
+        next_path.append(starting_vertex)
         if starting_vertex == destination_vertex:
-            print(copy_path)
-            return copy_path
+            print(next_path)
+            return next_path
         else:
             for neighbor in self.get_neighbors(starting_vertex):
                 if neighbor not in visited_nodes:
-                    final_path = self.dfs_route_finder(neighbor, destination_vertex, visited_nodes, copy_path)
-                    if final_path:
-                        print("final_path",final_path)
-                        return final_path
+                    neighbor_path = self.dfs_recursive(neighbor, destination_vertex, visited_nodes, next_path)
+                    if neighbor_path:
+                        return neighbor_path
+        raise ValueError("Oops there is no path") 
+         
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
     # https://github.com/LambdaSchool/Graphs/blob/master/objectives/breadth-first-search/img/bfs-visit-order.png
