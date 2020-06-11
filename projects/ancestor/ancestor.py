@@ -1,6 +1,8 @@
 from typing import List, Tuple
+
 Lineage = Tuple[int, int]
 Ancestor_List = List[Lineage]
+
 """ UPER
 
 Understand: The input is a list of tuples that are one way edges between parent
@@ -36,25 +38,50 @@ In our example graph which is illustrated above and in dict form below:
 
 Actually, since this is deterministic, it might be better to 
 """
+
+
+
 def earliest_ancestor(ancestors: Ancestor_List, starting_node: int) -> int:
 	child_parent_format: Ancestor_List = [tuple(reversed(x)) for x in ancestors]
 	graph = {}
-
+	# creates graph we want
 	for i in child_parent_format:
 		graph.setdefault(i[0], []).append(i[1])
+	# return graph	
 
-	return(graph)    
+	s = []
+	s.append(starting_node)
+	visited_nodes = set()
+	while len(s) > 0:
+		curr = s.pop()
+		if curr not in visited_nodes:
+			print(curr)
+			visited_nodes.add(curr)
+			for neighbor in graph[curr]:
+				s.append(neighbor)
+
+
+# def recursive_dfs_paths(graph, starting_node, path=[]):
+# 	path = [starting_node] # starting path
+# 	all_paths = [path] # create list of paths
+
+# 	for neighbor in graph[starting_node]:
+# 		new_paths = recursive_dfs_paths(graph, neighbor, path)
+# 		for branch in new_paths:
+# 			print (branch)
+# 			all_paths.append(new_paths)
+# 	return all_paths 
+
 
 ancestor_list = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7), (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
-graph = {}
+graph = earliest_ancestor(ancestor_list, 1)
 
-for i in ancestor_list:
-	graph.setdefault(i[0], []).append(i[1])
+# for i in ancestor_list:
+# 	graph.setdefault(i[0], []).append(i[1])
 
-print(graph)
+# print(graph)
 
-print(earliest_ancestor(ancestor_list, 1))
+# h = {}
 
-name_list = [("Sean", 5), ("Dave", 20), ("Sean", 11)]
 
-print(dict(name_list))
+recursive_dfs_paths(graph, 6)

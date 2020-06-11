@@ -167,7 +167,7 @@ class Graph:
                     neighbor_path = self.dfs_recursive(neighbor, destination_vertex, visited_nodes, next_path)
                     if neighbor_path:
                         return neighbor_path
-        raise ValueError("Oops there is no path") 
+        # raise ValueError("Oops there is no path") 
          
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph

@@ -1,3 +1,29 @@
+import random
+import math
+import time
+import sys
+
+class Queue:
+    def __init__(self):
+        self.queue = []
+
+    def enqueue(self, value) -> None:
+        self.queue.append((value))
+    def dequeue(self):
+        if (self.size()) > 0:
+            return self.queue.pop(0)
+        else:
+            return None
+    def size(self):
+        return len(self.queue)
+
+class User:
+    def __init__(self, name):
+        self.name = name
+
+        
+
+
 def populate_graph(self, num_users, avg_friendships):
     # Reset graph
     self.last_id = 0
@@ -6,7 +32,7 @@ def populate_graph(self, num_users, avg_friendships):
 
     # Add users
     for i in range(0, num_users):
-	self.addUser(f"User {i}")
+        self.addUser(f"User {i}")
 
     # Create Frienships
     # Generate all possible friendship combinations
@@ -14,8 +40,8 @@ def populate_graph(self, num_users, avg_friendships):
 
     # Avoid duplicates by ensuring the first number is smaller than the second
     for user_id in self.users:
-	for friend_id in range(user_id + 1, self.last_id + 1):
-	    possible_friendships.append((user_id, friend_id))
+        for friend_id in range(user_id + 1, self.last_id + 1):
+            possible_friendships.append((user_id, friend_id))
 
     # Shuffle the possible friendships
     random.shuffle(possible_friendships)
@@ -24,5 +50,5 @@ def populate_graph(self, num_users, avg_friendships):
     # X is determined by the formula: num_users * avg_friendships // 2
     # Need to divide by 2 since each add_friendship() creates 2 friendships
     for i in range(num_users * avg_friendships // 2):
-	friendship = possible_friendships[i]
-	self.add_friendship(friendship[0], friendship[1])
+        friendship = possible_friendships[i]
+        self.add_friendship(friendship[0], friendship[1])
