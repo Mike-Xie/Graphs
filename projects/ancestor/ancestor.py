@@ -1,6 +1,6 @@
 from typing import List, Tuple
 Lineage = Tuple[int, int]
-Ancestor_Graph = List[Lineage]
+Ancestor_List = List[Lineage]
 """ UPER
 
 Understand: The input is a list of tuples that are one way edges between parent
@@ -30,17 +30,31 @@ a person who does not exist in the graph is input.
 
 In our example graph which is illustrated above and in dict form below:
 
-{1: 3, 2: 3, 3: 6, 5: 7, 4: 8, 8: 9, 11: 8, 10: 1}
+{3: [1, 2], 6: [3, 5], 7: [5], 5: [4], 8: [4, 11], 9: [8], 1: [10]}
 
 10, 2, 4, 11 would return -1. They do not exist among the values of the dictionary
 
 Actually, since this is deterministic, it might be better to 
 """
-def earliest_ancestor(ancestors: Ancestor_Graph, starting_node: int) -> int:
-    family_tree = dict(ancestors)
+def earliest_ancestor(ancestors: Ancestor_List, starting_node: int) -> int:
+	child_parent_format: Ancestor_List = [tuple(reversed(x)) for x in ancestors]
+	graph = {}
 
+	for i in child_parent_format:
+		graph.setdefault(i[0], []).append(i[1])
 
+	return(graph)    
 
-test_ancestors = dict([(1, 3), (2, 3), (3, 6), (5, 6), (5, 7), (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)])
-print(test_ancestors)
+ancestor_list = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7), (4, 5), (4, 8), (8, 9), (11, 8), (10, 1)]
+graph = {}
 
+for i in ancestor_list:
+	graph.setdefault(i[0], []).append(i[1])
+
+print(graph)
+
+print(earliest_ancestor(ancestor_list, 1))
+
+name_list = [("Sean", 5), ("Dave", 20), ("Sean", 11)]
+
+print(dict(name_list))
