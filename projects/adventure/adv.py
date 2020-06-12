@@ -12,9 +12,9 @@ world = World()
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
 #map_file = "maps/test_cross.txt"
-map_file = "maps/test_loop.txt"
+# map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-# map_file = "maps/main_maze.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -111,36 +111,42 @@ class Stack():
         return len(self.stack)     
     def peek(self):
         return self.stack[-1]
+
+# dictionary to hold inverse directions for backing up part         
 reverse_directions = {'n':'s', 's':'n', 'w':'e', 'e':'w'}
-traversal_path = []        
-s = Stack() # hold rooms and direction that got us there so can reverse
-visited_graph = {} # holds k,v pairs of rooms and 
-s.push(value=(player.current_room, None))
 
-while s.size() > 0:
-    curr = s.pop()
-    room = curr[0] 
-    direction_traveled = curr[1]
+def traverse_graph():
+    traversal_path = []        
+    s = Stack() # hold rooms and direction tuples that got us there so can reverse
+    visited_graph = {} # holds k,v pairs of rooms and directions we've gone so far
+    s.push(value=(player.current_room, None))
+    while s.size() > 0:
+        curr = s.peek()
+        room, direction_traveled = curr[0], curr[1] 
+        if room.id not in visited_graph: 
+            visited_graph[room.id] = set() # initial set of directions we've gone, use set to avoid duplicates
+        if direction_traveled: 
+            visited_graph[room.id].add(direction_traveled) 
+        # break if we visit all the rooms
+        if len(visited_graph) == len(room_graph):
+            break
+        # DFS
+        unexplored_branches = [direction for direction in room.get_exits() if direction not in visited_graph[room.id]]
+        if unexplored_branches: # while there is somewhere to go, update everything
+            random_direction = random.choice(unexplored_branches)
+            print("CAN GO SOMEWHERE",random_direction)
+            visited_graph[room.id].add(random_direction)         # update graph
+            # push the room we go to and what direction to reverse if dead end   
+            s.push(value=(room.get_room_in_direction(random_direction), reverse_directions[random_direction]))
+            traversal_path.append(random_direction) 
+        # backing up
+        else: 
+            print("BACKING UP", direction_traveled)
+            traversal_path.append(direction_traveled)
+            s.pop()
+    return traversal_path
 
-    if room.id not in visited_graph:
-        visited_graph[room.id] = set()
-    if direction_traveled: 
-        visited_graph[room.id].add(direction_traveled)
-    # break if we visit all the rooms
-    if len(visited_graph) == len(room_graph):
-        break
-    # DFS
-    unexplored_branches = [direction for direction in room.get_exits() if direction not in visited_graph[room.id]]
-    if unexplored_branches:
-        random_direction = random.choice(unexplored_branches)
-        visited_graph[room.id].add(random_direction)         # update graph
-        # push the room we go to and what direction to reverse if dead end   
-        s.push(value=(room.get_room_in_direction(random_direction), reverse_directions[random_direction]))
-        traversal_path.append(random_direction) 
-    # backing up
-    else: 
-        traversal_path.append(direction_traveled)
-        s.pop()
+traversal_path = traverse_graph() 
 # TRAVERSAL TEST
 visited_rooms = set()
 player.current_room = world.starting_room
