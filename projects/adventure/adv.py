@@ -45,8 +45,15 @@ Can move to a room with player.travel(direction key)
 def traverse_maze(player) -> List[str]:
     start = player.current_room
     print(start)
+    print("EXIT directions")
     print(start.get_exits())
+   # print("directions")
+   # print(start.get_directions())
+    print("coords")
+    print(start.get_coords())
 
+
+traverse_maze(player)
 
 traversal_path = ['n','n']
 
