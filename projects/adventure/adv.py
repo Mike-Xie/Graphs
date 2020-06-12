@@ -33,14 +33,70 @@ form:
 room_id : {'n': '?', 's': '?', 'w': '?', 'e': '?'}
 }
 
-Can move to a room with player.travel(direction key)
+Player methods:
+player.travel(direction key) to travel to valid room
+player.current_room.id to get the current room's id
 
+Room get methods methods:
+exits with room.get_exits()
+coordinates with room.get_coords()
+the name of a next room with room.get_room_in_direction(direction)
 
+So then we start in room zero like this:
+Room_0: {'n': '?', 's': '?', 'w': '?', 'e': '?'}
+
+And we add this to the list of explored rooms:
+
+explored_rooms: List[Room] = []
+
+Also we need the return list of directions:
+
+directions: List[str] = []
+
+We start by checking exits with room.get_exits() and updating the ?s to 
+which rooms they link to with get_room_in_direction(direction)
+
+Also checking that we haven't been there already with something like:
+
+room.get_room_in_direction(direction) in explored_rooms == False
+
+and then we go into a random valid next room and repeating this until we can
+no longer do this and are at a dead end.
+
+SAVE THE DIRECTIONS WE WENT IN ORDER SO CAN REVERSE WHEN WE REACH A DEAD END
+
+Then we back out until we can go to a new room.
+
+So something like:
+
+initialize directions, rooms graph, starting room
+
+DFT standard boiler plate code using a stack
+
+stack.push(starting room)
+graph = {}
+
+while stack.size > 0:
+    curr = s.pop()
+    if curr not in graph:
+        graph add curr
+        for neighbor in room.get_exits:
+
+  """
+        s = Stack()
+        s.push(starting_vertex)
+        visited_nodes: Set = set()
+        while s.size() > 0:
+            curr = s.pop()
+            if curr not in visited_nodes:
+                print(curr)
+                visited_nodes.add(curr)
+                for neighbor in self.get_neighbors(curr):
+                    s.push(neighbor)
+
+        
 
 """
-
-# Fill this out with directions to walk
-# traversal_path = ['n', 'n']
 
 def traverse_maze(player) -> List[str]:
     start = player.current_room
@@ -55,6 +111,7 @@ def traverse_maze(player) -> List[str]:
 
 traverse_maze(player)
 
+# Fill this out with directions to walk
 traversal_path = ['n','n']
 
 
