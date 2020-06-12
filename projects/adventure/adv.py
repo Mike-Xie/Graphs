@@ -1,9 +1,9 @@
 from room import Room
 from player import Player
 from world import World
-
 import random
 from ast import literal_eval
+from typing import List
 
 # Load world
 world = World()
@@ -22,16 +22,33 @@ world.load_graph(room_graph)
 
 # Print an ASCII map
 world.print_rooms()
-
+# instantiate a player 
 player = Player(world.starting_room)
 
-# UPER 
-# Do random depth first traversal
+""" UPER 
+Use the room and player APIs to traverse the entire maze
+Have to construct the graph as we walk around in the
+form:
+{ 
+room_id : {'n': '?', 's': '?', 'w': '?', 'e': '?'}
+}
 
+Can move to a room with player.travel(direction key)
+
+
+
+"""
 
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
-traversal_path = []
+
+def traverse_maze(player) -> List[str]:
+    start = player.current_room
+    print(start)
+    print(start.get_exits())
+
+
+traversal_path = ['n','n']
 
 
 
@@ -41,6 +58,7 @@ player.current_room = world.starting_room
 visited_rooms.add(player.current_room)
 
 for move in traversal_path:
+    print("CURRENT ROOM", player.current_room)
     player.travel(move)
     visited_rooms.add(player.current_room)
 
